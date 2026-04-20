@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedido de Camisetas VDO</title>
+    <style>
+        :root { --vdo-yellow: #ffcc00; --vdo-dark: #333; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; padding: 15px; color: var(--vdo-dark); }
+        .container { max-width: 850px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: auto; }
+        h2 { text-align: center; border-bottom: 4px solid var(--vdo-yellow); padding-bottom: 10px; margin-bottom: 25px; }
+        .item-pedido { background: #fafafa; padding: 20px; border-radius: 10px; margin-bottom: 20px; position: relative; border: 1px solid #eee; border-left: 6px solid var(--vdo-yellow); display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: center; }
+        .img-container { width: 100%; height: 300px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd; overflow: hidden; }
+        .img-item-preview { max-width: 100%; max-height: 100%; object-fit: contain; display: none; }
+        .placeholder-img { color: #999; font-size: 13px; font-style: italic; }
+        label { display: block; margin-top: 12px; font-weight: 600; font-size: 13px; color: #555; }
+        select, input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        .btn-adicionar { background: #fff; border: 2px dashed var(--vdo-yellow); padding: 12px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; color: #b78103; margin-bottom: 25px; }
+        .price-footer { background: var(--vdo-dark); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-top: 25px; }
+        .total-val { font-size: 32px; color: var(--vdo-yellow); font-weight: 800; display: block; }
+        .btn-enviar { width: 100%; padding: 20px; background-color: #007bff; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 18px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🚚 Pedido de Camisetas VDO</h2>
+
+    <form id="formFinal" action="https://formsubmit.co/3b0c4dc03954c36f57db200e51a13213" method="POST">
+        
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="Resumo_Pedido" id="resumoInput">
+
+        <div id="listaItens">
+            <div class="item-pedido" id="item-1">
+                <div>
+                    <label>ESTAMPA</label>
+                    <select class="p-estampa" required>
+                        <option value="Bóra Viajar!">"Bóra Viajar!"</option>
+                        <option value="Cachorro">"Eu levo a sério passeio com cachorro."</option>
+                        <option value="Avelã">Avelã Mochileira</option>
+                    </select>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div><label>TAMANHO</label><select class="p-tamanho"><option>P</option><option>M</option><option>G</option><option>GG</option></select></div>
+                        <div><label>COR</label><select class="p-cor"><option>Preto</option><option>Off White</option><option>Verde</option></select></div>
+                    </div>
+                    <label>QUANTIDADE</label>
+                    <input type="number" class="p-qtd" value="1" min="1" oninput="document.getElementById('totalDisplay').innerText = 'R$ ' + (this.value * 97).toLocaleString('pt-BR', {minimumFractionDigits: 2})">
+                </div>
+                <div class="img-container">
+                    <span class="placeholder-img">Visualização</span>
+                </div>
+            </div>
+        </div>
+
+        <label>NOME COMPLETO</label>
+        <input type="text" name="Nome" required>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div><label>CPF</label><input type="text" name="CPF" required></div>
+            <div><label>WHATSAPP</label><input type="tel" name="WhatsApp" required></div>
+        </div>
+
+        <label>ENDEREÇO DE ENTREGA</label>
+        <textarea name="Endereco" rows="2" required></textarea>
+
+        <div class="price-footer">
+            <span>TOTAL:</span>
+            <span class="total-val" id="totalDisplay">R$ 97,00</span>
+        </div>
+
+        <button type="submit" class="btn-enviar">Enviar Pedido</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('formFinal').onsubmit = function() {
+        let resumo = "";
+        const itens = document.querySelectorAll('.item-pedido');
+        itens.forEach((it, i) => {
+            const e = it.querySelector('.p-estampa').value;
+            const t = it.querySelector('.p-tamanho').value;
+            const c = it.querySelector('.p-cor').value;
+            const q = it.querySelector('.p-qtd').value;
+            resumo += `Item ${i+1}: ${e} (${c} | Tam: ${t} | Qtd: ${q}) // `;
+        });
+        document.getElementById('resumoInput').value = resumo;
+        return true; 
+    };
+</script>
+</body>
+</html>
