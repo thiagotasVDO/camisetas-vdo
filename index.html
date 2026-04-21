@@ -40,7 +40,7 @@
         /* Setas do Carrossel */
         .carousel-btn {
             position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white;
-            border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: none; /* Fica flex via JS */
+            border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: none; 
             align-items: center; justify-content: center; font-size: 14px; opacity: 0; transition: opacity 0.3s; z-index: 5;
         }
         .carousel-container:hover .carousel-btn { opacity: 1; }
@@ -205,46 +205,45 @@
     let cupomAtivo = null;
     let nomeCupomAtivo = "";
     
-    // Controle de Memória para o Carrossel
     let indicesCarrossel = {}; 
 
-    // O NOVO COFRE DE IMAGENS (Arrays com 4 fotos)
+    // O NOVO COFRE DE IMAGENS (Arrays com 4 fotos - Atualizado para .jpg)
     const imagens = {
         "Bóra Viajar!_Preto": [
-            "img/camiseta_frente_preto_thiago.png",
-            "img/camiseta_frente_preto_amanda.png",
-            "img/camiseta_costas_bora_preto_thiago.png",
-            "img/camiseta_costas_bora_preto_amanda.png"
+            "img/camiseta_frente_preto_thiago.jpg",
+            "img/camiseta_frente_preto_amanda.jpg",
+            "img/camiseta_costas_bora_preto_thiago.jpg",
+            "img/camiseta_costas_bora_preto_amanda.jpg"
         ],
         "Bóra Viajar!_Off White": [
-            "img/camiseta_frente_branco_thiago.png",
-            "img/camiseta_frente_branco_amanda.png",
-            "img/camiseta_costas_bora_branco_thiago.png",
-            "img/camiseta_costas_bora_branco_amanda.png"
+            "img/camiseta_frente_branco_thiago.jpg",
+            "img/camiseta_frente_branco_amanda.jpg",
+            "img/camiseta_costas_bora_branco_thiago.jpg",
+            "img/camiseta_costas_bora_branco_amanda.jpg"
         ],
         "Bóra Viajar!_Verde": [
-            "img/camiseta_frente_verde_thiago.png",
-            "img/camiseta_frente_verde_amanda.png",
-            "img/camiseta_costas_bora_verde_thiago.png",
-            "img/camiseta_costas_bora_verde_amanda.png"
+            "img/camiseta_frente_verde_thiago.jpg",
+            "img/camiseta_frente_verde_amanda.jpg",
+            "img/camiseta_costas_bora_verde_thiago.jpg",
+            "img/camiseta_costas_bora_verde_amanda.jpg"
         ],
         "Cachorro_Preto": [
-            "img/camiseta_frente_preto_thiago.png",
-            "img/camiseta_frente_preto_amanda.png",
-            "img/camiseta_costas_serio_preto_thiago.png",
-            "img/camiseta_costas_serio_preto_amanda.png"
+            "img/camiseta_frente_preto_thiago.jpg",
+            "img/camiseta_frente_preto_amanda.jpg",
+            "img/camiseta_costas_eulevo_preto_thiago.jpg",
+            "img/camiseta_costas_eulevo_preto_amanda.jpg"
         ],
         "Cachorro_Off White": [
-            "img/camiseta_frente_branco_thiago.png",
-            "img/camiseta_frente_branco_amanda.png",
-            "img/camiseta_costas_serio_branco_thiago.png",
-            "img/camiseta_costas_serio_branco_amanda.png"
+            "img/camiseta_frente_branco_thiago.jpg",
+            "img/camiseta_frente_branco_amanda.jpg",
+            "img/camiseta_costas_eulevo_branco_thiago.jpg",
+            "img/camiseta_costas_eulevo_branco_amanda.jpg"
         ],
         "Cachorro_Verde": [
-            "img/camiseta_frente_verde_thiago.png",
-            "img/camiseta_frente_verde_amanda.png",
-            "img/camiseta_costas_serio_verde_thiago.png",
-            "img/camiseta_costas_serio_verde_amanda.png"
+            "img/camiseta_frente_verde_thiago.jpg",
+            "img/camiseta_frente_verde_amanda.jpg",
+            "img/camiseta_costas_eulevo_verde_thiago.jpg",
+            "img/camiseta_costas_eulevo_verde_amanda.jpg"
         ],
         "Avelã_Off White": [
             "img/camiseta_avelamochileira_branco.png"
@@ -253,7 +252,7 @@
 
     function adicionarCamiseta() {
         contador++;
-        indicesCarrossel[contador] = 0; // Inicia a foto na posição 0
+        indicesCarrossel[contador] = 0; 
         
         const lista = document.getElementById('listaItens');
         const div = document.createElement('div');
@@ -303,7 +302,7 @@
                             <img id="img-${contador}">
                             <button type="button" class="carousel-btn right" id="btn-next-${contador}" onclick="mudarFoto(${contador}, 1)">&#10095;</button>
                         </div>
-                        <div class="flip-back"><img src="img/guia-tamanhos.png"></div>
+                        <div class="flip-back"><img src="img/guia-tamanhos.jpg"></div>
                     </div>
                 </div>
                 <a class="link-guia" onclick="virarCartao(${contador})" id="link-flip-${contador}">Ver Tabela de Medidas</a>
@@ -329,7 +328,6 @@
         link.innerText = link.innerText.includes("Ver") ? "Voltar para Foto" : "Ver Tabela de Medidas";
     }
 
-    // Função de Girar o Carrossel
     function mudarFoto(id, direcao) {
         const item = document.getElementById('item-' + id);
         const estampa = item.querySelector('.p-estampa').value;
@@ -337,15 +335,15 @@
         const chave = estampa + "_" + selectCor;
         
         const listaFotos = imagens[chave];
-        if(!listaFotos || listaFotos.length <= 1) return; // Segurança caso tenha só 1 foto
+        if(!listaFotos || listaFotos.length <= 1) return; 
 
         let idx = indicesCarrossel[id];
-        idx += direcao; // +1 ou -1
+        idx += direcao; 
 
-        if (idx >= listaFotos.length) idx = 0; // Volta pro começo
-        if (idx < 0) idx = listaFotos.length - 1; // Vai pro final
+        if (idx >= listaFotos.length) idx = 0; 
+        if (idx < 0) idx = listaFotos.length - 1; 
 
-        indicesCarrossel[id] = idx; // Salva a memória
+        indicesCarrossel[id] = idx; 
         document.getElementById('img-' + id).src = listaFotos[idx];
     }
 
@@ -370,12 +368,11 @@
         const listaFotos = imagens[chave];
 
         if (listaFotos && listaFotos.length > 0) { 
-            indicesCarrossel[id] = 0; // Reseta pro cara do zero
+            indicesCarrossel[id] = 0; 
             img.src = listaFotos[0]; 
             img.style.display = 'block'; 
             ph.style.display = 'none'; 
 
-            // Mostra ou esconde setas
             if (listaFotos.length > 1) {
                 btnPrev.style.display = 'flex';
                 btnNext.style.display = 'flex';
