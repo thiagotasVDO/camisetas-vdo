@@ -24,18 +24,24 @@
             .img-flip-wrapper { order: -1; } 
         }
 
-        /* Estrutura 3D e Carrossel */
+        /* Estrutura 3D e Carrossel (BUG CORRIGIDO) */
         .img-flip-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; }
-        .flip-container { perspective: 1000px; width: 100%; height: 250px; }
-        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flip-container { perspective: 1000px; width: 100%; height: 250px; position: relative; }
+        .flip-inner { position: absolute; width: 100%; height: 100%; top: 0; left: 0; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
         .flip-inner.is-flipped { transform: rotateY(180deg); }
-        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 10px; background: #fff; border: 1px solid #eee; overflow: hidden; }
+        
+        /* Adicionado top: 0 e left: 0 para ancorar as faces e impedir o deslocamento */
+        .flip-front, .flip-back { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            -webkit-backface-visibility: hidden; backface-visibility: hidden; 
+            border-radius: 10px; background: #fff; border: 1px solid #eee; overflow: hidden; box-sizing: border-box;
+        }
         
         /* Container Frontal (Carrossel) */
-        .carousel-container { display: flex; align-items: center; justify-content: center; position: relative; }
+        .carousel-container { display: flex; align-items: center; justify-content: center; }
         .flip-front img, .flip-back img { max-width: 100%; max-height: 100%; object-fit: contain; }
         .flip-front img { display: none; }
-        .flip-back { transform: rotateY(180deg); padding: 10px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
+        .flip-back { transform: rotateY(180deg); padding: 10px; display: flex; align-items: center; justify-content: center; }
         
         /* Setas do Carrossel */
         .carousel-btn {
@@ -49,7 +55,7 @@
         .carousel-btn.right { right: 5px; }
 
         .placeholder-text { color: #aaa; font-size: 11px; text-transform: uppercase; font-weight: bold; text-align: center; padding: 10px; position: absolute; }
-        .link-guia { margin-top: 10px; font-size: 13px; color: #b8860b; text-decoration: underline; cursor: pointer; font-weight: bold; }
+        .link-guia { margin-top: 15px; font-size: 13px; color: #b8860b; text-decoration: underline; cursor: pointer; font-weight: bold; z-index: 10; position: relative; }
 
         .btn-remover { position: absolute; top: -10px; right: -10px; background: #ff4d4f; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; }
         
@@ -207,43 +213,43 @@
     
     let indicesCarrossel = {}; 
 
-    // O NOVO COFRE DE IMAGENS (Arrays com 4 fotos - Atualizado para .jpg)
+    // O NOVO COFRE DE IMAGENS (Reordenado: Costas Amanda > Frente Amanda > Costas Thiago > Frente Thiago)
     const imagens = {
         "Bóra Viajar!_Preto": [
-            "img/camiseta_frente_preto_thiago.jpg",
+            "img/camiseta_costas_bora_preto_amanda.jpg",
             "img/camiseta_frente_preto_amanda.jpg",
             "img/camiseta_costas_bora_preto_thiago.jpg",
-            "img/camiseta_costas_bora_preto_amanda.jpg"
+            "img/camiseta_frente_preto_thiago.jpg"
         ],
         "Bóra Viajar!_Off White": [
-            "img/camiseta_frente_branco_thiago.jpg",
+            "img/camiseta_costas_bora_branco_amanda.jpg",
             "img/camiseta_frente_branco_amanda.jpg",
             "img/camiseta_costas_bora_branco_thiago.jpg",
-            "img/camiseta_costas_bora_branco_amanda.jpg"
+            "img/camiseta_frente_branco_thiago.jpg"
         ],
         "Bóra Viajar!_Verde": [
-            "img/camiseta_frente_verde_thiago.jpg",
+            "img/camiseta_costas_bora_verde_amanda.jpg",
             "img/camiseta_frente_verde_amanda.jpg",
             "img/camiseta_costas_bora_verde_thiago.jpg",
-            "img/camiseta_costas_bora_verde_amanda.jpg"
+            "img/camiseta_frente_verde_thiago.jpg"
         ],
         "Cachorro_Preto": [
-            "img/camiseta_frente_preto_thiago.jpg",
+            "img/camiseta_costas_eulevo_preto_amanda.jpg",
             "img/camiseta_frente_preto_amanda.jpg",
             "img/camiseta_costas_eulevo_preto_thiago.jpg",
-            "img/camiseta_costas_eulevo_preto_amanda.jpg"
+            "img/camiseta_frente_preto_thiago.jpg"
         ],
         "Cachorro_Off White": [
-            "img/camiseta_frente_branco_thiago.jpg",
+            "img/camiseta_costas_eulevo_branco_amanda.jpg",
             "img/camiseta_frente_branco_amanda.jpg",
             "img/camiseta_costas_eulevo_branco_thiago.jpg",
-            "img/camiseta_costas_eulevo_branco_amanda.jpg"
+            "img/camiseta_frente_branco_thiago.jpg"
         ],
         "Cachorro_Verde": [
-            "img/camiseta_frente_verde_thiago.jpg",
+            "img/camiseta_costas_eulevo_verde_amanda.jpg",
             "img/camiseta_frente_verde_amanda.jpg",
             "img/camiseta_costas_eulevo_verde_thiago.jpg",
-            "img/camiseta_costas_eulevo_verde_amanda.jpg"
+            "img/camiseta_frente_verde_thiago.jpg"
         ],
         "Avelã_Off White": [
             "img/camiseta_avelamochileira_branco.png"
