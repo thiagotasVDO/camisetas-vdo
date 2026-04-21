@@ -3,91 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedido de Camisetas | Vai Dormir Onde?</title>
+    <title>Lojinha | Vai Dormir Onde?</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+
     <style>
-        :root { --vdo-yellow: #ffcc00; --vdo-dark: #222; --vdo-light: #f4f4f4; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #ddd; margin: 0; padding: 15px; color: var(--vdo-dark); }
+        :root {
+            --vdo-magenta: #e91e63;   
+            --vdo-orange: #ff9800;    
+            --vdo-blue-dark: #1a237e; 
+            --vdo-blue-light: #2196f3;
+            --vdo-purple: #9c27b0;     
+            --vdo-bg-light: #fdfaf5;   
+            --vdo-yellow: #ffcc00; 
+            --vdo-dark: #222; 
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--vdo-blue-dark); 
+            margin: 0;
+            padding: 20px;
+            color: var(--vdo-blue-dark); 
+        }
         
-        .container { max-width: 700px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: auto; min-height: 400px; position: relative; }
+        .container {
+            max-width: 700px;
+            background: var(--vdo-bg-light);
+            padding: 40px;
+            border-radius: 30px; 
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            margin: auto;
+            min-height: 400px;
+            position: relative;
+        }
         
-        .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { margin: 5px 0; border-bottom: 4px solid var(--vdo-yellow); display: inline-block; padding-bottom: 5px; }
+        .header { text-align: center; margin-bottom: 35px; }
+        .header h2 { margin: 5px 0; color: var(--vdo-magenta); font-size: 32px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .header p { font-size: 15px; color: var(--vdo-orange); margin-top: 0; font-weight: 600; }
         
         .item-pedido { 
-            background: var(--vdo-light); padding: 20px; border-radius: 15px; margin-bottom: 20px; 
-            position: relative; border: 1px solid #ccc; 
-            display: grid; grid-template-columns: 1fr 220px; gap: 20px; align-items: center;
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(156, 39, 176, 0.1) 100%);
+            padding: 25px; border-radius: 20px; margin-bottom: 25px; 
+            position: relative; border: 1px solid rgba(26, 35, 126, 0.1); 
+            display: grid; grid-template-columns: 1fr 220px; gap: 25px; align-items: center;
         }
 
         @media (max-width: 600px) { 
-            .item-pedido { grid-template-columns: 1fr; } 
-            .img-flip-wrapper { order: -1; } 
+            .item-pedido { grid-template-columns: 1fr; padding: 20px; } 
+            .img-flip-wrapper { order: -1; margin-bottom: 15px; } 
         }
 
-        /* Estrutura 3D e Carrossel (BUG CORRIGIDO) */
         .img-flip-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .flip-container { perspective: 1000px; width: 100%; height: 250px; position: relative; }
         .flip-inner { position: absolute; width: 100%; height: 100%; top: 0; left: 0; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
         .flip-inner.is-flipped { transform: rotateY(180deg); }
-        
-        /* Adicionado top: 0 e left: 0 para ancorar as faces e impedir o deslocamento */
-        .flip-front, .flip-back { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            -webkit-backface-visibility: hidden; backface-visibility: hidden; 
-            border-radius: 10px; background: #fff; border: 1px solid #eee; overflow: hidden; box-sizing: border-box;
-        }
-        
-        /* Container Frontal (Carrossel) */
+        .flip-front, .flip-back { position: absolute; top: 0; left: 0; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 15px; background: #fff; border: 1px solid #eee; overflow: hidden; box-sizing: border-box; }
         .carousel-container { display: flex; align-items: center; justify-content: center; }
         .flip-front img, .flip-back img { max-width: 100%; max-height: 100%; object-fit: contain; }
         .flip-front img { display: none; }
         .flip-back { transform: rotateY(180deg); padding: 10px; display: flex; align-items: center; justify-content: center; }
         
-        /* Setas do Carrossel */
-        .carousel-btn {
-            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white;
-            border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: none; 
-            align-items: center; justify-content: center; font-size: 14px; opacity: 0; transition: opacity 0.3s; z-index: 5;
-        }
-        .carousel-container:hover .carousel-btn { opacity: 1; }
-        .carousel-btn:hover { background: var(--vdo-yellow); color: var(--vdo-dark); }
-        .carousel-btn.left { left: 5px; }
-        .carousel-btn.right { right: 5px; }
+        /* Setas do Carrossel (Opacidade 1 fixa) */
+        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 152, 0, 0.8); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 16px; opacity: 1; transition: background 0.3s; z-index: 5; }
+        .carousel-btn:hover { background: var(--vdo-magenta); } 
+        .carousel-btn.left { left: 8px; }
+        .carousel-btn.right { right: 8px; }
 
-        .placeholder-text { color: #aaa; font-size: 11px; text-transform: uppercase; font-weight: bold; text-align: center; padding: 10px; position: absolute; }
-        .link-guia { margin-top: 15px; font-size: 13px; color: #b8860b; text-decoration: underline; cursor: pointer; font-weight: bold; z-index: 10; position: relative; }
-
-        .btn-remover { position: absolute; top: -10px; right: -10px; background: #ff4d4f; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; }
+        .placeholder-text { color: #aaa; font-size: 12px; text-transform: uppercase; font-weight: 700; text-align: center; padding: 10px; position: absolute; }
+        .link-guia { margin-top: 15px; font-size: 13px; color: var(--vdo-orange); text-decoration: underline; cursor: pointer; font-weight: 700; z-index: 10; position: relative; }
+        .btn-remover { position: absolute; top: -12px; right: -12px; background: #ff4d4f; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold; box-shadow: 0 3px 6px rgba(0,0,0,0.3); z-index: 10; font-size: 18px; }
         
-        label { display: block; margin-top: 12px; font-weight: bold; font-size: 12px; color: #555; text-transform: uppercase; }
-        select, input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 2px solid #eee; border-radius: 10px; box-sizing: border-box; font-size: 16px; outline: none; }
-        select:focus, input:focus { border-color: var(--vdo-yellow); }
+        label { display: block; margin-top: 15px; font-weight: 700; font-size: 12px; color: var(--vdo-blue-dark); text-transform: uppercase; letter-spacing: 0.5px; }
+        select, input, textarea { font-family: 'Poppins', sans-serif; width: 100%; padding: 14px; margin-top: 6px; border: 2px solid rgba(26, 35, 126, 0.1); border-radius: 20px; box-sizing: border-box; font-size: 15px; outline: none; background-color: #fff; color: var(--vdo-blue-dark); transition: border-color 0.3s, box-shadow 0.3s; }
+        select:focus, input:focus { border-color: var(--vdo-orange); box-shadow: 0 0 10px rgba(255, 152, 0, 0.2); }
         
-        .btn-adicionar { background: white; border: 2px dashed var(--vdo-yellow); padding: 15px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: bold; color: #886b00; margin-bottom: 25px; }
+        .btn-adicionar { font-family: 'Poppins', sans-serif; background: white; border: 2px dashed var(--vdo-orange); padding: 18px; width: 100%; border-radius: 30px; cursor: pointer; font-weight: 700; color: var(--vdo-orange); margin-bottom: 30px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: background 0.3s, color 0.3s; }
+        .btn-adicionar:hover { background: var(--vdo-orange); color: white; }
         
-        .secao-cliente { border-top: 2px solid #eee; padding-top: 20px; }
-        .secao-titulo { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: var(--vdo-dark); border-left: 4px solid var(--vdo-yellow); padding-left: 10px; }
-        
+        .secao-cliente { border-top: 2px solid rgba(26, 35, 126, 0.1); padding-top: 25px; margin-top: 10px; }
+        .secao-titulo { font-size: 18px; font-weight: 900; margin-bottom: 20px; color: var(--vdo-orange); text-transform: uppercase; letter-spacing: 1px; }
         .pix-name-wrapper { position: relative; display: flex; align-items: flex-end; gap: 10px; }
-        .btn-mesmo-nome { background: #eee; border: 1px solid #ccc; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 11px; font-weight: bold; height: 46px; white-space: nowrap; }
+        .btn-mesmo-nome { font-family: 'Poppins', sans-serif; background: #eee; border: 1px solid #ccc; padding: 12px; border-radius: 15px; cursor: pointer; font-size: 11px; font-weight: 700; height: 50px; white-space: nowrap; color: var(--vdo-blue-dark); }
 
-        .cupom-box { background: #fffdf0; padding: 15px; border-radius: 10px; border: 1px dashed var(--vdo-yellow); margin-top: 20px; }
-        .btn-cupom { background: var(--vdo-dark); color: var(--vdo-yellow); border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-cupom:hover { background: #444; }
-        .msg-cupom { font-size: 13px; margin-top: 8px; font-weight: bold; display: none; }
+        .cupom-box { background: rgba(255, 152, 0, 0.05); padding: 20px; border-radius: 20px; border: 2px dashed var(--vdo-orange); margin-top: 25px; }
+        .cupom-box label { color: var(--vdo-orange); margin-top: 0; }
+        .btn-cupom { font-family: 'Poppins', sans-serif; background: var(--vdo-orange); color: white; border: none; padding: 0 25px; border-radius: 25px; font-weight: 700; cursor: pointer; transition: background 0.3s; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+        .btn-cupom:hover { background: #e68900; }
+        .msg-cupom { font-size: 13px; margin-top: 10px; font-weight: 700; display: none; }
         .msg-sucesso { color: #28a745; display: block; }
         .msg-erro { color: #dc3545; display: block; }
 
         .footer-total { background: var(--vdo-dark); color: white; padding: 20px; border-radius: 15px; text-align: center; margin: 25px 0; }
-        .total-val { font-size: 32px; color: var(--vdo-yellow); font-weight: 900; display: block; }
+        .total-val { font-size: 36px; color: var(--vdo-yellow); font-weight: 900; display: block; }
         .preco-cortado { text-decoration: line-through; color: #999; font-size: 18px; margin-right: 10px; font-weight: normal; }
         
-        .btn-enviar { width: 100%; padding: 20px; background-color: #28a745; border: none; border-radius: 12px; color: white; font-weight: 900; font-size: 18px; cursor: pointer; text-transform: uppercase; }
+        .btn-enviar { font-family: 'Poppins', sans-serif; width: 100%; padding: 22px; background-color: var(--vdo-magenta); border: none; border-radius: 35px; color: white; font-weight: 900; font-size: 18px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; transition: background 0.3s, box-shadow 0.3s; box-shadow: 0 5px 20px rgba(233, 30, 99, 0.4); }
+        .btn-enviar:hover { background-color: #d81b60; box-shadow: 0 8px 25px rgba(233, 30, 99, 0.5); }
 
-        #telaPagamento { display: none; text-align: center; padding: 20px; animation: fadeIn 0.5s ease-in-out; }
-        .pix-box { background: #f9f9f9; border: 2px dashed var(--vdo-yellow); padding: 20px; border-radius: 15px; margin: 20px 0; }
-        .chave-pix { font-size: 18px; font-weight: bold; color: var(--vdo-dark); display: block; margin: 10px 0; word-break: break-all; }
-        .btn-copiar { background: var(--vdo-dark); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        #telaPagamento { display: none; text-align: center; padding: 30px; animation: fadeIn 0.5s ease-in-out; background: linear-gradient(135deg, rgba(33, 150, 243, 0.05) 0%, rgba(156, 39, 176, 0.05) 100%); border-radius: 30px; }
+        .pix-box { background: #fdfaf5; border: 3px dashed var(--vdo-magenta); padding: 30px; border-radius: 20px; margin: 25px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        #telaPagamento .total-val { color: var(--vdo-dark); margin-bottom: 20px; }
+        .chave-pix { font-size: 18px; font-weight: 700; color: var(--vdo-blue-dark); display: block; margin: 15px 0; word-break: break-all; background: #eee; padding: 12px; border-radius: 10px; }
+        .btn-copiar { font-family: 'Poppins', sans-serif; background: var(--vdo-magenta); color: white; border: none; padding: 14px 30px; border-radius: 25px; cursor: pointer; font-weight: 700; margin-top: 15px; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; transition: background 0.3s; }
+        .btn-copiar:hover { background: #d81b60; }
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
@@ -97,8 +116,8 @@
 <div class="container">
     <div id="conteudoForm">
         <div class="header">
-            <h2>VAI DORMIR ONDE?</h2>
-            <p style="font-size: 14px; color: #666;">Reserve sua camiseta oficial</p>
+            <h2>🚐 VAI DORMIR ONDE?</h2>
+            <p>Leve um pedacinho da nossa jornada com você! ✨</p>
         </div>
 
         <form id="formVDO">
@@ -108,39 +127,39 @@
 
             <div id="listaItens"></div>
 
-            <button type="button" class="btn-adicionar" onclick="adicionarCamiseta()">+ ADICIONAR OUTRA CAMISETA</button>
+            <button type="button" class="btn-adicionar" onclick="adicionarCamiseta()">👕 + QUERO ADICIONAR OUTRA CAMISETA!</button>
 
             <div class="secao-cliente">
-                <div class="secao-titulo">Dados Pessoais</div>
-                <label>Nome Completo do Comprador</label>
-                <input type="text" name="Nome_Cliente" id="nomeCliente" required>
+                <div class="secao-titulo">👤 Pra gente se conhecer!</div>
+                <label>Qual o seu nome completo?</label>
+                <input type="text" name="Nome_Cliente" id="nomeCliente" placeholder="Digite seu nome" required>
 
-                <div style="display: flex; gap: 10px;">
-                    <div style="flex:1;"><label>WhatsApp</label><input type="tel" name="WhatsApp" placeholder="(00) 00000-0000" required></div>
-                    <div style="flex:1;"><label>CPF</label><input type="text" name="CPF" placeholder="000.000.000-00" required></div>
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex:1;"><label>📱 WhatsApp</label><input type="tel" name="WhatsApp" id="inputWhatsApp" placeholder="(00) 00000-0000" maxlength="15" required></div>
+                    <div style="flex:1;"><label>📄 CPF (Para envio)</label><input type="text" name="CPF" id="inputCPF" placeholder="000.000.000-00" maxlength="14" required></div>
                 </div>
 
-                <label>Nome no PIX (Identificação do Pagador)</label>
+                <label>💳 Nome na conta do PIX</label>
                 <div class="pix-name-wrapper">
-                    <input type="text" name="Nome_no_Pix" id="nomePix" placeholder="Nome que aparecerá no comprovante" required>
-                    <button type="button" class="btn-mesmo-nome" onclick="copiarNomeComprador()">MESMO NOME</button>
+                    <input type="text" name="Nome_no_Pix" id="nomePix" placeholder="Nome que vai aparecer no comprovante" required>
+                    <button type="button" class="btn-mesmo-nome" onclick="copiarNomeComprador()">☝️ É O MESMO</button>
                 </div>
             </div>
 
             <div class="secao-cliente">
-                <div class="secao-titulo">Endereço de Entrega</div>
+                <div class="secao-titulo">📍 Onde a van vai entregar?</div>
                 <label>CEP</label>
-                <input type="text" name="CEP" placeholder="00000-000" required style="max-width: 200px;">
-                <div style="display: flex; gap: 10px;">
-                    <div style="flex:3;"><label>Rua / Avenida</label><input type="text" name="Rua" required></div>
-                    <div style="flex:1;"><label>Número</label><input type="text" name="Numero" required></div>
+                <input type="text" name="CEP" id="inputCEP" placeholder="00000-000" maxlength="9" required style="max-width: 200px;">
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex:3;"><label>Rua / Avenida</label><input type="text" name="Rua" placeholder="Sua rua" required></div>
+                    <div style="flex:1;"><label>Número</label><input type="text" name="Numero" placeholder="Nº" required></div>
                 </div>
                 <label>Complemento</label>
-                <input type="text" name="Complemento">
-                <div style="display: flex; gap: 10px;">
-                    <div style="flex:2;"><label>Cidade</label><input type="text" name="Cidade" required></div>
+                <input type="text" name="Complemento" placeholder="Apto, Bloco, Casa 2, etc. (Opcional)">
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex:2;"><label>Cidade</label><input type="text" name="Cidade" placeholder="Sua cidade" required></div>
                     <div style="flex:1;">
-                        <label>Estado (UF)</label>
+                        <label>Estado</label>
                         <select name="Estado" required>
                             <option value="" disabled selected>UF</option>
                             <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
@@ -150,124 +169,101 @@
             </div>
 
             <div class="cupom-box">
-                <label>Possui Cupom de Desconto?</label>
+                <label>🎟️ Tem algum cupom de desconto?</label>
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="inputCupom" placeholder="Digite seu cupom" style="text-transform: uppercase;" onkeydown="if(event.key === 'Enter'){ event.preventDefault(); aplicarCupom(); }">
+                    <input type="text" id="inputCupom" placeholder="Digite aqui..." style="text-transform: uppercase;" onkeydown="if(event.key === 'Enter'){ event.preventDefault(); aplicarCupom(); }">
                     <button type="button" class="btn-cupom" onclick="aplicarCupom()">APLICAR</button>
                 </div>
                 <div id="msgCupom" class="msg-cupom"></div>
             </div>
 
             <div class="footer-total">
-                <span>VALOR TOTAL DA RESERVA:</span>
-                <span class="total-val" id="totalDisplay">R$ **,**<span style="font-size: 0.5em; font-weight: normal; font-style: italic;"> (frete incluso)</span></span>
+                <span>VALOR TOTAL DA SUA COMPRA:</span>
+                <span class="total-val" id="totalDisplay">R$ **,**<span style="font-size: 0.5em; font-weight: normal; font-style: italic;"> (frete por nossa conta! 🚚)</span></span>
                 <input type="hidden" name="VALOR_TOTAL_PEDIDO" id="totalInput">
             </div>
 
-            <button type="submit" class="btn-enviar" id="btnSubmit">Reservar e Pagar Agora</button>
+            <button type="submit" class="btn-enviar" id="btnSubmit">🚀 FECHAR PEDIDO E PAGAR!</button>
         </form>
     </div>
 
     <div id="telaPagamento">
-        <h2 style="color: #28a745;">Pedido Reservado! ✅</h2>
-        <p>Recebemos os seus dados. <br>Agora basta realizar o pagamento via Pix:</p>
+        <h2 style="color: #28a745; margin-bottom: 5px;">🎉 Uhuuul! Pedido Reservado!</h2>
+        <p style="font-size: 15px; font-weight: 600; color: var(--vdo-blue-dark);">Obrigado por se tornar um AVELOVER OFICIAL! 💛<br>Agora basta realizar o pagamento via Pix:</p>
         
         <div class="pix-box">
-            <span style="font-size: 14px; color: #666; font-weight: bold;">VALOR DO PIX:</span>
-            <span class="total-val" id="totalPix" style="color: var(--vdo-dark); margin-bottom: 15px;">R$ 0,00</span>
+            <span style="font-size: 14px; color: #666; font-weight: 700;">VALOR DO PIX:</span>
+            <span class="total-val" id="totalPix">R$ 0,00</span>
             
-            <span style="font-size: 12px; color: #666; text-transform: uppercase; font-weight: bold;">Chave Pix (E-mail):</span>
+            <span style="font-size: 12px; color: #666; text-transform: uppercase; font-weight: 700;">Chave Pix (E-mail):</span>
             <span class="chave-pix" id="chaveTexto">vaidormironde@gmail.com</span>
-            <button type="button" class="btn-copiar" onclick="copiarPix()">COPIAR CHAVE PIX</button>
+            <button type="button" class="btn-copiar" onclick="copiarPix()">📋 COPIAR CHAVE PIX</button>
         </div>
 
-        <div style="text-align: left; font-size: 14px; color: #555; background: #fffdf0; padding: 15px; border-radius: 10px; border: 1px solid #eee;">
-            <strong>Próximos passos:</strong><br>
-            1. Realize o Pix no valor acima para <strong>vaidormironde@gmail.com</strong>.<br>
-            2. O pagamento será identificado pelo nome que você informou.<br>
-            3. Entraremos em contato via WhatsApp em breve para confirmar o envio!
+        <div style="text-align: left; font-size: 14px; color: #555; background: #fffdf0; padding: 20px; border-radius: 15px; border: 1px solid #eee;">
+            <strong>O que acontece agora? 👇</strong><br><br>
+            1️⃣ Faça o Pix no valor exato para a nossa chave (<strong>vaidormironde@gmail.com</strong>).<br>
+            2️⃣ O pagamento será validado automaticamente pelo nome que você preencheu.<br>
+            3️⃣ Fique de olho no seu WhatsApp! Vamos te chamar em breve para confirmar tudo. 🚐💨
         </div>
-        
-        <p style="margin-top: 20px; font-size: 12px; color: #999;">Obrigado por apoiar o Vai Dormir Onde?!</p>
     </div>
 </div>
 
 <script>
-    // ==========================================
-    // 💰 PAINEL DE CONTROLE
-    // ==========================================
     const precoAdulto = 97.00;
     const precoInfantil = 77.00;
     const chavePix = "vaidormironde@gmail.com";
+    const cuponsCadastrados = { "VDO10": { tipo: "porcentagem", valor: 10 }, "FRETEGRATIS": { tipo: "fixo", valor: 30 }, "BOLIVIA": { tipo: "porcentagem", valor: 15 } };
+    let contador = 0; let cupomAtivo = null; let nomeCupomAtivo = ""; let indicesCarrossel = {}; 
 
-    const cuponsCadastrados = {
-        "VDO10": { tipo: "porcentagem", valor: 10 },
-        "FRETEGRATIS": { tipo: "fixo", valor: 30 },
-        "BOLIVIA": { tipo: "porcentagem", valor: 15 }
-    };
-    // ==========================================
-
-    let contador = 0;
-    let cupomAtivo = null;
-    let nomeCupomAtivo = "";
-    
-    let indicesCarrossel = {}; 
-
-    // O NOVO COFRE DE IMAGENS (Reordenado: Costas Amanda > Frente Amanda > Costas Thiago > Frente Thiago)
     const imagens = {
-        "Bóra Viajar!_Preto": [
-            "img/camiseta_costas_bora_preto_amanda.jpg",
-            "img/camiseta_frente_preto_amanda.jpg",
-            "img/camiseta_costas_bora_preto_thiago.jpg",
-            "img/camiseta_frente_preto_thiago.jpg"
-        ],
-        "Bóra Viajar!_Off White": [
-            "img/camiseta_costas_bora_branco_amanda.jpg",
-            "img/camiseta_frente_branco_amanda.jpg",
-            "img/camiseta_costas_bora_branco_thiago.jpg",
-            "img/camiseta_frente_branco_thiago.jpg"
-        ],
-        "Bóra Viajar!_Verde": [
-            "img/camiseta_costas_bora_verde_amanda.jpg",
-            "img/camiseta_frente_verde_amanda.jpg",
-            "img/camiseta_costas_bora_verde_thiago.jpg",
-            "img/camiseta_frente_verde_thiago.jpg"
-        ],
-        "Cachorro_Preto": [
-            "img/camiseta_costas_eulevo_preto_amanda.jpg",
-            "img/camiseta_frente_preto_amanda.jpg",
-            "img/camiseta_costas_eulevo_preto_thiago.jpg",
-            "img/camiseta_frente_preto_thiago.jpg"
-        ],
-        "Cachorro_Off White": [
-            "img/camiseta_costas_eulevo_branco_amanda.jpg",
-            "img/camiseta_frente_branco_amanda.jpg",
-            "img/camiseta_costas_eulevo_branco_thiago.jpg",
-            "img/camiseta_frente_branco_thiago.jpg"
-        ],
-        "Cachorro_Verde": [
-            "img/camiseta_costas_eulevo_verde_amanda.jpg",
-            "img/camiseta_frente_verde_amanda.jpg",
-            "img/camiseta_costas_eulevo_verde_thiago.jpg",
-            "img/camiseta_frente_verde_thiago.jpg"
-        ],
-        "Avelã_Off White": [
-            "img/camiseta_avelamochileira_branco.png"
-        ]
+        "Bóra Viajar!_Preto": ["img/camiseta_costas_bora_preto_amanda.jpg", "img/camiseta_frente_preto_amanda.jpg", "img/camiseta_costas_bora_preto_thiago.jpg", "img/camiseta_frente_preto_thiago.jpg"],
+        "Bóra Viajar!_Off White": ["img/camiseta_costas_bora_branco_amanda.jpg", "img/camiseta_frente_branco_amanda.jpg", "img/camiseta_costas_bora_branco_thiago.jpg", "img/camiseta_frente_branco_thiago.jpg"],
+        "Bóra Viajar!_Verde": ["img/camiseta_costas_bora_verde_amanda.jpg", "img/camiseta_frente_verde_amanda.jpg", "img/camiseta_costas_bora_verde_thiago.jpg", "img/camiseta_frente_verde_thiago.jpg"],
+        "Cachorro_Preto": ["img/camiseta_costas_eulevo_preto_amanda.jpg", "img/camiseta_frente_preto_amanda.jpg", "img/camiseta_costas_eulevo_preto_thiago.jpg", "img/camiseta_frente_preto_thiago.jpg"],
+        "Cachorro_Off White": ["img/camiseta_costas_eulevo_branco_amanda.jpg", "img/camiseta_frente_branco_amanda.jpg", "img/camiseta_costas_eulevo_branco_thiago.jpg", "img/camiseta_frente_branco_thiago.jpg"],
+        "Cachorro_Verde": ["img/camiseta_costas_eulevo_verde_amanda.jpg", "img/camiseta_frente_verde_amanda.jpg", "img/camiseta_costas_eulevo_verde_thiago.jpg", "img/camiseta_frente_verde_thiago.jpg"],
+        "Avelã_Off White": ["img/camiseta_avelamochileira_branco.png"]
+    };
+
+    // ==========================================
+    // 🎭 MÁSCARAS DE FORMATAÇÃO
+    // ==========================================
+    const mascaraCampos = () => {
+        // CEP: 00000-000
+        document.getElementById('inputCEP').addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, "");
+            v = v.replace(/^(\d{5})(\d)/, "$1-$2");
+            e.target.value = v;
+        });
+
+        // WhatsApp: (00) 00000-0000
+        document.getElementById('inputWhatsApp').addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, "");
+            v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+            v = v.replace(/(\d)(\d{4})$/, "$1-$2");
+            e.target.value = v;
+        });
+
+        // CPF: 000.000.000-00
+        document.getElementById('inputCPF').addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, "");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            e.target.value = v;
+        });
     };
 
     function adicionarCamiseta() {
-        contador++;
-        indicesCarrossel[contador] = 0; 
-        
+        contador++; indicesCarrossel[contador] = 0; 
         const lista = document.getElementById('listaItens');
         const div = document.createElement('div');
-        div.className = 'item-pedido';
-        div.id = 'item-' + contador;
+        div.className = 'item-pedido'; div.id = 'item-' + contador;
         div.innerHTML = `
             ${contador > 1 ? `<button type="button" class="btn-remover" onclick="removerItem(${contador})">×</button>` : ''}
             <div class="campos-pedido">
-                <label>Estampa</label>
+                <label>🎨 Estampa</label>
                 <select class="p-estampa" onchange="atualizarInterface(${contador})" required>
                     <option value="" disabled selected>Escolha o modelo</option>
                     <option value="Bóra Viajar!">"Bóra Viajar!"</option>
@@ -276,7 +272,14 @@
                 </select>
                 <div style="display: flex; gap: 10px;">
                     <div style="flex:1;">
-                        <label>Tamanho</label>
+                        <label>🎨 Cor</label>
+                        <select class="p-cor" onchange="atualizarInterface(${contador})" required>
+                            <option value="" disabled selected>Cor</option>
+                            <option value="Preto">Preto</option><option value="Off White">Off White</option><option value="Verde">Verde</option>
+                        </select>
+                    </div>
+                    <div style="flex:1;">
+                        <label>📏 Tamanho</label>
                         <select class="p-tamanho" onchange="tratarTamanho(${contador}); calcularTotal()" required>
                             <option value="" disabled selected>Tam.</option>
                             <option value="P">P</option><option value="M">M</option><option value="G">G</option><option value="GG">GG</option><option value="Infantil">Infantil</option>
@@ -288,22 +291,15 @@
                             </select>
                         </div>
                     </div>
-                    <div style="flex:1;">
-                        <label>Cor</label>
-                        <select class="p-cor" onchange="atualizarInterface(${contador})" required>
-                            <option value="" disabled selected>Cor</option>
-                            <option value="Preto">Preto</option><option value="Off White">Off White</option><option value="Verde">Verde</option>
-                        </select>
-                    </div>
                 </div>
-                <label>Qtd.</label>
+                <label>📦 Qtd.</label>
                 <input type="number" class="p-qtd" value="1" min="1" oninput="calcularTotal()">
             </div>
             <div class="img-flip-wrapper">
                 <div class="flip-container">
                     <div class="flip-inner" id="flip-inner-${contador}">
                         <div class="flip-front carousel-container">
-                            <span class="placeholder-text" id="ph-${contador}">Selecione<br>Modelo</span>
+                            <span class="placeholder-text" id="ph-${contador}">👀 Escolha<br>Estampa e Cor</span>
                             <button type="button" class="carousel-btn left" id="btn-prev-${contador}" onclick="mudarFoto(${contador}, -1)">&#10094;</button>
                             <img id="img-${contador}">
                             <button type="button" class="carousel-btn right" id="btn-next-${contador}" onclick="mudarFoto(${contador}, 1)">&#10095;</button>
@@ -311,205 +307,97 @@
                         <div class="flip-back"><img src="img/guia-tamanhos.jpg"></div>
                     </div>
                 </div>
-                <a class="link-guia" onclick="virarCartao(${contador})" id="link-flip-${contador}">Ver Tabela de Medidas</a>
+                <a class="link-guia" onclick="virarCartao(${contador})" id="link-flip-${contador}">📐 Ver Tabela de Medidas</a>
             </div>
         `;
-        lista.appendChild(div);
-        calcularTotal();
+        lista.appendChild(div); calcularTotal();
     }
 
     function copiarNomeComprador() { document.getElementById('nomePix').value = document.getElementById('nomeCliente').value; }
-
     function tratarTamanho(id) {
-        const item = document.getElementById('item-' + id);
-        const tam = item.querySelector('.p-tamanho').value;
-        const box = document.getElementById('infantil-box-' + id);
-        box.style.display = tam === 'Infantil' ? 'block' : 'none';
+        const item = document.getElementById('item-' + id); const tam = item.querySelector('.p-tamanho').value;
+        const box = document.getElementById('infantil-box-' + id); box.style.display = tam === 'Infantil' ? 'block' : 'none';
         item.querySelector('.p-tamanho-infantil').required = (tam === 'Infantil');
     }
-
     function virarCartao(id) {
         document.getElementById('flip-inner-' + id).classList.toggle('is-flipped');
-        const link = document.getElementById('link-flip-' + id);
-        link.innerText = link.innerText.includes("Ver") ? "Voltar para Foto" : "Ver Tabela de Medidas";
+        const link = document.getElementById('link-flip-' + id); link.innerText = link.innerText.includes("Ver") ? "👕 Voltar para Foto" : "📐 Ver Tabela de Medidas";
     }
-
     function mudarFoto(id, direcao) {
-        const item = document.getElementById('item-' + id);
-        const estampa = item.querySelector('.p-estampa').value;
-        const selectCor = item.querySelector('.p-cor').value;
-        const chave = estampa + "_" + selectCor;
-        
-        const listaFotos = imagens[chave];
-        if(!listaFotos || listaFotos.length <= 1) return; 
-
-        let idx = indicesCarrossel[id];
-        idx += direcao; 
-
-        if (idx >= listaFotos.length) idx = 0; 
-        if (idx < 0) idx = listaFotos.length - 1; 
-
-        indicesCarrossel[id] = idx; 
-        document.getElementById('img-' + id).src = listaFotos[idx];
+        const item = document.getElementById('item-' + id); const estampa = item.querySelector('.p-estampa').value;
+        const selectCor = item.querySelector('.p-cor').value; const chave = estampa + "_" + selectCor;
+        const listaFotos = imagens[chave]; if(!listaFotos || listaFotos.length <= 1) return; 
+        let idx = indicesCarrossel[id]; idx += direcao; 
+        if (idx >= listaFotos.length) idx = 0; if (idx < 0) idx = listaFotos.length - 1; 
+        indicesCarrossel[id] = idx; document.getElementById('img-' + id).src = listaFotos[idx];
     }
-
     function atualizarInterface(id) {
-        const item = document.getElementById('item-' + id);
-        const estampa = item.querySelector('.p-estampa').value;
-        const selectCor = item.querySelector('.p-cor');
-        
-        const img = document.getElementById('img-' + id);
-        const ph = document.getElementById('ph-' + id);
-        const btnPrev = document.getElementById('btn-prev-' + id);
+        const item = document.getElementById('item-' + id); const estampa = item.querySelector('.p-estampa').value;
+        const selectCor = item.querySelector('.p-cor'); const img = document.getElementById('img-' + id);
+        const ph = document.getElementById('ph-' + id); const btnPrev = document.getElementById('btn-prev-' + id);
         const btnNext = document.getElementById('btn-next-' + id);
-        
         if (estampa === "Avelã") {
-            selectCor.value = "Off White";
-            Array.from(selectCor.options).forEach(opt => { if(opt.value !== "Off White" && opt.value !== "") opt.disabled = true; });
-        } else {
-            Array.from(selectCor.options).forEach(opt => opt.disabled = false);
-        }
-        
-        const chave = estampa + "_" + selectCor.value;
-        const listaFotos = imagens[chave];
-
+            selectCor.value = "Off White"; Array.from(selectCor.options).forEach(opt => { if(opt.value !== "Off White" && opt.value !== "") opt.disabled = true; });
+        } else { Array.from(selectCor.options).forEach(opt => opt.disabled = false); }
+        const chave = estampa + "_" + selectCor.value; const listaFotos = imagens[chave];
         if (listaFotos && listaFotos.length > 0) { 
-            indicesCarrossel[id] = 0; 
-            img.src = listaFotos[0]; 
-            img.style.display = 'block'; 
-            ph.style.display = 'none'; 
-
-            if (listaFotos.length > 1) {
-                btnPrev.style.display = 'flex';
-                btnNext.style.display = 'flex';
-            } else {
-                btnPrev.style.display = 'none';
-                btnNext.style.display = 'none';
-            }
-        } else {
-            img.style.display = 'none';
-            ph.style.display = 'block';
-            btnPrev.style.display = 'none';
-            btnNext.style.display = 'none';
-        }
+            indicesCarrossel[id] = 0; img.src = listaFotos[0]; img.style.display = 'block'; ph.style.display = 'none'; 
+            if (listaFotos.length > 1) { btnPrev.style.display = 'flex'; btnNext.style.display = 'flex'; } 
+            else { btnPrev.style.display = 'none'; btnNext.style.display = 'none'; }
+        } else { img.style.display = 'none'; ph.style.display = 'block'; btnPrev.style.display = 'none'; btnNext.style.display = 'none'; }
         calcularTotal();
     }
-
     function removerItem(id) { document.getElementById('item-' + id).remove(); calcularTotal(); }
-
     function aplicarCupom() {
-        const input = document.getElementById('inputCupom').value.trim().toUpperCase();
-        const msg = document.getElementById('msgCupom');
-        
+        const input = document.getElementById('inputCupom').value.trim().toUpperCase(); const msg = document.getElementById('msgCupom');
         if (input === "") return;
-
         if (cuponsCadastrados[input]) {
-            cupomAtivo = cuponsCadastrados[input];
-            nomeCupomAtivo = input;
+            cupomAtivo = cuponsCadastrados[input]; nomeCupomAtivo = input;
             let txtDesc = cupomAtivo.tipo === "porcentagem" ? `${cupomAtivo.valor}% de desconto` : `R$ ${cupomAtivo.valor},00 de desconto`;
-            msg.innerText = `✅ Cupom ${input} ativado (${txtDesc})!`;
-            msg.className = "msg-cupom msg-sucesso";
-        } else {
-            cupomAtivo = null;
-            nomeCupomAtivo = "";
-            msg.innerText = "❌ Cupom inválido ou expirado.";
-            msg.className = "msg-cupom msg-erro";
-        }
+            msg.innerText = `✅ Cupom ${input} ativado (${txtDesc})!`; msg.className = "msg-cupom msg-sucesso";
+        } else { cupomAtivo = null; nomeCupomAtivo = ""; msg.innerText = "❌ Ops! Esse cupom parece inválido ou já expirou."; msg.className = "msg-cupom msg-erro"; }
         calcularTotal();
     }
-
     function calcularTotal() {
-        let subTotal = 0;
-        let completo = false;
-        
+        let subTotal = 0; let completo = false;
         document.querySelectorAll('.item-pedido').forEach(it => {
-            const e = it.querySelector('.p-estampa').value;
-            const tam = it.querySelector('.p-tamanho').value;
-            const c = it.querySelector('.p-cor').value;
-            const q = parseInt(it.querySelector('.p-qtd').value) || 0;
+            const e = it.querySelector('.p-estampa').value; const tam = it.querySelector('.p-tamanho').value;
+            const c = it.querySelector('.p-cor').value; const q = parseInt(it.querySelector('.p-qtd').value) || 0;
             const tInf = it.querySelector('.p-tamanho-infantil').value;
-            
-            if (e && tam && c && q > 0 && (tam !== "Infantil" || tInf)) {
-                subTotal += (tam === "Infantil") ? (precoInfantil * q) : (precoAdulto * q);
-                completo = true;
-            }
+            if (e && tam && c && q > 0 && (tam !== "Infantil" || tInf)) { subTotal += (tam === "Infantil") ? (precoInfantil * q) : (precoAdulto * q); completo = true; }
         });
-        
-        const textoFrete = `<span style="font-size: 0.5em; font-weight: normal; font-style: italic;"> (frete incluso)</span>`;
-        
+        const textoFrete = `<span style="font-size: 0.5em; font-weight: normal; font-style: italic;"> (frete por nossa conta! 🚚)</span>`;
         if (completo) {
-            let totalFinal = subTotal;
-            let descontoStr = "";
-            
+            let totalFinal = subTotal; let descontoStr = "";
             if (cupomAtivo) {
-                let valorDesconto = 0;
-                if (cupomAtivo.tipo === "porcentagem") {
-                    valorDesconto = subTotal * (cupomAtivo.valor / 100);
-                } else if (cupomAtivo.tipo === "fixo") {
-                    valorDesconto = cupomAtivo.valor;
-                }
+                let valorDesconto = 0; if (cupomAtivo.tipo === "porcentagem") { valorDesconto = subTotal * (cupomAtivo.valor / 100); } 
+                else if (cupomAtivo.tipo === "fixo") { valorDesconto = cupomAtivo.valor; }
                 if (valorDesconto > subTotal) valorDesconto = subTotal;
-                
-                totalFinal = subTotal - valorDesconto;
-                descontoStr = `<span class="preco-cortado">R$ ${subTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>`;
+                totalFinal = subTotal - valorDesconto; descontoStr = `<span class="preco-cortado">R$ ${subTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>`;
             }
-
             const valorFormatado = "R$ " + totalFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('totalDisplay').innerHTML = descontoStr + valorFormatado + textoFrete;
-            
-            let relatorioFinal = `TOTAL FINAL: ${valorFormatado}`;
-            if (cupomAtivo) relatorioFinal += ` (Desconto aplicado. Cupom: ${nomeCupomAtivo})`;
-            
-            document.getElementById('totalInput').value = relatorioFinal;
-            document.getElementById('totalPix').innerText = valorFormatado;
-        } else {
-            document.getElementById('totalDisplay').innerHTML = "R$ **,**" + textoFrete;
-            document.getElementById('totalInput').value = "Aguardando preenchimento";
-            document.getElementById('totalPix').innerText = "R$ 0,00";
-        }
+            let relatorioFinal = `TOTAL FINAL: ${valorFormatado}`; if (cupomAtivo) relatorioFinal += ` (Desconto aplicado. Cupom: ${nomeCupomAtivo})`;
+            document.getElementById('totalInput').value = relatorioFinal; document.getElementById('totalPix').innerText = valorFormatado;
+        } else { document.getElementById('totalDisplay').innerHTML = "R$ **,**" + textoFrete; document.getElementById('totalInput').value = "Aguardando preenchimento"; document.getElementById('totalPix').innerText = "R$ 0,00"; }
     }
-
-    function copiarPix() {
-        navigator.clipboard.writeText(chavePix);
-        alert("Chave Pix copiada!");
-    }
+    function copiarPix() { navigator.clipboard.writeText(chavePix); alert("Chave Pix copiada com sucesso! Só colar no app do seu banco. 🚐💨"); }
 
     document.getElementById('formVDO').onsubmit = function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('btnSubmit');
-        btn.innerText = "ENVIANDO...";
-        btn.disabled = true;
-
-        let resumo = "";
-        document.querySelectorAll('.item-pedido').forEach((it, i) => {
-            const e = it.querySelector('.p-estampa').value;
-            let t = it.querySelector('.p-tamanho').value;
+        e.preventDefault(); const btn = document.getElementById('btnSubmit'); btn.innerText = "⏳ SALVANDO RESERVA..."; btn.disabled = true;
+        let resumo = ""; document.querySelectorAll('.item-pedido').forEach((it, i) => {
+            const e = it.querySelector('.p-estampa').value; let t = it.querySelector('.p-tamanho').value;
             if (t === "Infantil") t = `Infantil (${it.querySelector('.p-tamanho-infantil').value} anos)`;
-            const c = it.querySelector('.p-cor').value;
-            const q = it.querySelector('.p-qtd').value;
+            const c = it.querySelector('.p-cor').value; const q = it.querySelector('.p-qtd').value;
             resumo += `ITEM ${i+1}: ${e} (${c} | Tam: ${t} | Qtd: ${q}) // `;
         });
-        document.getElementById('resumoInput').value = resumo;
-
-        const formData = new FormData(this);
-        
-        fetch("https://formsubmit.co/ajax/3b0c4dc03954c36f57db200e51a13213", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => {
-            document.getElementById('conteudoForm').style.display = 'none';
-            document.getElementById('telaPagamento').style.display = 'block';
-            window.scrollTo(0,0);
-        })
-        .catch(error => {
-            alert("Erro ao enviar. Tente novamente.");
-            btn.innerText = "Reservar e Pagar Agora";
-            btn.disabled = false;
-        });
+        document.getElementById('resumoInput').value = resumo; const formData = new FormData(this);
+        fetch("https://formsubmit.co/ajax/3b0c4dc03954c36f57db200e51a13213", { method: "POST", body: formData })
+        .then(response => { document.getElementById('conteudoForm').style.display = 'none'; document.getElementById('telaPagamento').style.display = 'block'; window.scrollTo(0,0); })
+        .catch(error => { alert("Opa, deu um errinho de conexão. Tente clicar novamente!"); btn.innerText = "🚀 FECHAR PEDIDO E PAGAR!"; btn.disabled = false; });
     };
 
-    window.onload = adicionarCamiseta;
+    window.onload = () => { adicionarCamiseta(); mascaraCampos(); };
 </script>
 </body>
 </html>
