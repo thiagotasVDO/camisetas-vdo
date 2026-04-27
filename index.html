@@ -51,14 +51,13 @@
 
         .flex-row { display: flex; gap: 15px; }
 
-        /* Ajustes finos para Mobile */
         @media (max-width: 600px) { 
             body { padding: 10px; }
             .container { padding: 25px 15px; border-radius: 20px; }
             .item-pedido { grid-template-columns: 1fr; padding: 20px; } 
             .img-flip-wrapper { order: -1; margin-bottom: 15px; } 
             .flex-row { flex-direction: column; gap: 10px; }
-            .carousel-btn { width: 44px !important; height: 44px !important; font-size: 20px !important; } /* Botões maiores no toque */
+            .carousel-btn { width: 44px !important; height: 44px !important; font-size: 20px !important; }
         }
 
         .img-flip-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; }
@@ -84,6 +83,9 @@
         select, input, textarea { font-family: 'Poppins', sans-serif; width: 100%; padding: 14px; margin-top: 6px; border: 2px solid rgba(26, 35, 126, 0.1); border-radius: 20px; box-sizing: border-box; font-size: 15px; outline: none; background-color: #fff; color: var(--vdo-blue-dark); transition: border-color 0.3s, box-shadow 0.3s; }
         select:focus, input:focus { border-color: var(--vdo-orange); box-shadow: 0 0 10px rgba(255, 152, 0, 0.2); }
         
+        /* Deixa as opções esgotadas em cinza */
+        option:disabled { color: #ccc; font-style: italic; }
+
         .btn-adicionar { font-family: 'Poppins', sans-serif; background: white; border: 2px dashed var(--vdo-orange); padding: 18px; width: 100%; border-radius: 30px; cursor: pointer; font-weight: 700; color: var(--vdo-orange); margin-bottom: 30px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: background 0.3s, color 0.3s; }
         .btn-adicionar:hover { background: var(--vdo-orange); color: white; }
         
@@ -219,10 +221,29 @@
 </div>
 
 <script>
-    const precoAdulto = 97.00;
-    const precoInfantil = 77.00;
+    // ==========================================
+    // 💰 PAINEL DE CONTROLE (Preços e Estoque)
+    // Para tirar uma cor do estoque, mude true para false
+    // ==========================================
+    const precoAdulto = 95.00;
+    const precoInfantil = 85.00;
     const chavePix = "vaidormironde@gmail.com";
-    const cuponsCadastrados = { "VDO10": { tipo: "porcentagem", valor: 10 }, "FRETEGRATIS": { tipo: "fixo", valor: 30 }, "BOLIVIA": { tipo: "porcentagem", valor: 15 } };
+
+    const estoque = {
+        "Bóra Viajar!_Preto": true,
+        "Bóra Viajar!_Off White": true,
+        "Bóra Viajar!_Verde": true,
+        "Cachorro_Preto": true,
+        "Cachorro_Off White": true,
+        "Cachorro_Verde": true,
+        "Avelã_Off White": true
+    };
+
+    const cuponsCadastrados = { 
+        "AVELOVER20": { tipo: "porcentagem", valor: 20 }
+    };
+    // ==========================================
+
     let contador = 0; let cupomAtivo = null; let nomeCupomAtivo = ""; let indicesCarrossel = {}; 
 
     const imagens = {
@@ -235,23 +256,28 @@
         "Avelã_Off White": ["img/camiseta_avelamochileira_branco.png"]
     };
 
-    // ==========================================
-    // 🎭 MÁSCARAS DE FORMATAÇÃO
-    // ==========================================
+    // Função que verifica se pelo menos UMA cor da estampa tem estoque
+    function estampaTemEstoque(nomeEstampa) {
+        for (let chave in estoque) {
+            if (chave.startsWith(nomeEstampa + "_") && estoque[chave] === true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     const mascaraCampos = () => {
         document.getElementById('inputCEP').addEventListener('input', (e) => {
             let v = e.target.value.replace(/\D/g, "");
             v = v.replace(/^(\d{5})(\d)/, "$1-$2");
             e.target.value = v;
         });
-
         document.getElementById('inputWhatsApp').addEventListener('input', (e) => {
             let v = e.target.value.replace(/\D/g, "");
             v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
             v = v.replace(/(\d)(\d{4})$/, "$1-$2");
             e.target.value = v;
         });
-
         document.getElementById('inputCPF').addEventListener('input', (e) => {
             let v = e.target.value.replace(/\D/g, "");
             v = v.replace(/(\d{3})(\d)/, "$1.$2");
@@ -266,15 +292,16 @@
         const lista = document.getElementById('listaItens');
         const div = document.createElement('div');
         div.className = 'item-pedido'; div.id = 'item-' + contador;
+        
         div.innerHTML = `
             ${contador > 1 ? `<button type="button" class="btn-remover" onclick="removerItem(${contador})">×</button>` : ''}
             <div class="campos-pedido">
                 <label>🎨 Estampa</label>
                 <select class="p-estampa" onchange="atualizarInterface(${contador})" required>
                     <option value="" disabled selected>Escolha o modelo</option>
-                    <option value="Bóra Viajar!">"Bóra Viajar!"</option>
-                    <option value="Cachorro">"Levo a sério passeio com cachorro"</option>
-                    <option value="Avelã">Avelã Mochileira</option>
+                    <option value="Bóra Viajar!" ${!estampaTemEstoque("Bóra Viajar!") ? 'disabled' : ''}>"Bóra Viajar!" ${!estampaTemEstoque("Bóra Viajar!") ? '(ESGOTADO ⏳)' : ''}</option>
+                    <option value="Cachorro" ${!estampaTemEstoque("Cachorro") ? 'disabled' : ''}>"Levo a sério passeio com cachorro" ${!estampaTemEstoque("Cachorro") ? '(ESGOTADO ⏳)' : ''}</option>
+                    <option value="Avelã" ${!estampaTemEstoque("Avelã") ? 'disabled' : ''}>Avelã Mochileira ${!estampaTemEstoque("Avelã") ? '(ESGOTADO ⏳)' : ''}</option>
                 </select>
                 <div class="flex-row">
                     <div style="flex:1;">
@@ -337,14 +364,37 @@
         if (idx >= listaFotos.length) idx = 0; if (idx < 0) idx = listaFotos.length - 1; 
         indicesCarrossel[id] = idx; document.getElementById('img-' + id).src = listaFotos[idx];
     }
+    
     function atualizarInterface(id) {
         const item = document.getElementById('item-' + id); const estampa = item.querySelector('.p-estampa').value;
         const selectCor = item.querySelector('.p-cor'); const img = document.getElementById('img-' + id);
         const ph = document.getElementById('ph-' + id); const btnPrev = document.getElementById('btn-prev-' + id);
         const btnNext = document.getElementById('btn-next-' + id);
-        if (estampa === "Avelã") {
-            selectCor.value = "Off White"; Array.from(selectCor.options).forEach(opt => { if(opt.value !== "Off White" && opt.value !== "") opt.disabled = true; });
-        } else { Array.from(selectCor.options).forEach(opt => opt.disabled = false); }
+        
+        if (estampa) {
+            Array.from(selectCor.options).forEach(opt => {
+                if (opt.value !== "") {
+                    opt.text = opt.value; // Reseta o texto
+                    opt.disabled = false; // Reseta o estado
+                    
+                    if (estampa === "Avelã" && opt.value !== "Off White") {
+                        opt.disabled = true;
+                    } else {
+                        const chaveCombinacao = estampa + "_" + opt.value;
+                        if (estoque[chaveCombinacao] === false) {
+                            opt.disabled = true;
+                            opt.text = opt.value + " (ESGOTADO ⏳)";
+                        }
+                    }
+                }
+            });
+            
+            // Limpa o campo de cor se a opção atual ficou desabilitada
+            if (selectCor.options[selectCor.selectedIndex] && selectCor.options[selectCor.selectedIndex].disabled) {
+                selectCor.value = "";
+            }
+        }
+
         const chave = estampa + "_" + selectCor.value; const listaFotos = imagens[chave];
         if (listaFotos && listaFotos.length > 0) { 
             indicesCarrossel[id] = 0; img.src = listaFotos[0]; img.style.display = 'block'; ph.style.display = 'none'; 
@@ -353,6 +403,7 @@
         } else { img.style.display = 'none'; ph.style.display = 'block'; btnPrev.style.display = 'none'; btnNext.style.display = 'none'; }
         calcularTotal();
     }
+    
     function removerItem(id) { document.getElementById('item-' + id).remove(); calcularTotal(); }
     function aplicarCupom() {
         const input = document.getElementById('inputCupom').value.trim().toUpperCase(); const msg = document.getElementById('msgCupom');
